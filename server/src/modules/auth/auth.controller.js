@@ -1,9 +1,17 @@
-import { register , login } from "./auth.service.js";
-
+import { register, login } from "./auth.service.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const registerController = async (req, res) => {
   try {
-    const userdata = req.body;
+    const { username, email, password } = req.body;
+
+    const userdata = {
+      username,
+      email,
+      password: await bcrypt.hash(password, 10),
+    };
+
     const user = await register(userdata);
 
     res.status(201).json({
@@ -22,9 +30,10 @@ export const registerController = async (req, res) => {
 
 export const loginController = async (req, res) => {
   try {
-    const userdata = req.body;
+    const { email, password } = req.body;
 
-    const user = await login(userdata);
+    //find user by email
+    const user = await login({ email });
 
     if (!user) {
       return res.status(404).json({
@@ -33,10 +42,27 @@ export const loginController = async (req, res) => {
       });
     }
 
+    //check password
+    const isMatch = await bcrypt.compare(password, user.password);
+
+
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    
+    //generate jwt
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     res.status(200).json({
       success: true,
       message: "User logged in successfully",
-      data: user,
+      data: { user, token },
     });
   } catch (error) {
     res.status(500).json({
