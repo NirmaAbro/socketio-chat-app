@@ -3,6 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
+import { registerChatHandlers } from "./src/sockets/chat.socket.js";
 
 dotenv.config();
 
@@ -20,11 +21,7 @@ connectDB();
 
 // Listen for socket connections
 io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
+  registerChatHandlers(io, socket);
 });
 
 // Start server
