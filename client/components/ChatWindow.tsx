@@ -1,6 +1,7 @@
 "use client";
 
 import { useChatStore } from "@/lib/store";
+import LogoutButton from "./LogoutButton";
 
 export default function ChatWindow() {
   const { messages, userId, selectedUser } = useChatStore();
@@ -17,9 +18,28 @@ export default function ChatWindow() {
     <div className="flex flex-col h-full bg-[#0b141a]">
 
       {/* HEADER */}
-      <div className="p-4 border-b border-gray-700 text-white font-semibold">
-       Name:   {selectedUser?.username}
+      <div className="p-4 border-b border-gray-700 flex justify-between">
+        {/* name  */}
+        <div className="p-4 border-b border-gray-700 text-cyan-600 font-semibold">
+          Name:   {selectedUser?.username}
+        </div>
+
+        <div className="flex gap-2">
+          {/* btn  */}
+          <div className="">
+            <button className="bg-green-600 px-4 rounded-lg text-white">
+              Call
+            </button>
+          </div>
+
+          <div>
+            <LogoutButton />
+          </div>
+
+        </div>
+
       </div>
+
 
       {/* MESSAGES */}
       <div className="flex-1 p-4 overflow-y-auto space-y-3">
@@ -31,8 +51,8 @@ export default function ChatWindow() {
           >
             <div
               className={`px-4 py-2 rounded-lg max-w-xs text-sm ${msg.sender === userId
-                  ? "bg-[#005c4b] text-white"
-                  : "bg-[#202c33] text-white"
+                ? "bg-[#005c4b] text-white"
+                : "bg-[#202c33] text-white"
                 }`}
             >
               {msg.content}
