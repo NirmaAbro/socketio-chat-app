@@ -1,7 +1,5 @@
 import { io } from "socket.io-client";
 
-import { io } from "socket.io-client";
-
 // Replace with your backend URL later
 const SOCKET_URL = "http://localhost:5000";
 
