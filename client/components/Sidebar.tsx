@@ -1,8 +1,9 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { RxAvatar } from "react-icons/rx";
+import { useChatStore } from "@/lib/store";
 
 export default function Sidebar() {
   type User = {
@@ -13,6 +14,7 @@ export default function Sidebar() {
   };
 
   const [users, setUsers] = useState<User[]>([]);
+  const { setSelectedUser, onlineUsers } = useChatStore();
 
 
   const handleFetchUsers = async (): Promise<void> => {
@@ -51,15 +53,18 @@ export default function Sidebar() {
           users.map((user) => (
             <div
               key={user._id}
+              onClick={() => setSelectedUser(user)}
               className="flex items-center gap-3 p-4 hover:bg-[#2a3942] cursor-pointer"
             >
               {/* <div className="w-10 h-10 bg-gray-500 rounded-full" /> */}
               <div>
-              <RxAvatar />
+                <RxAvatar />
               </div>
               <div>
                 <p className="font-semibold">{user?.username}</p>
-                <p className="text-xs text-gray-400">{user?.status}</p>
+                <p className="text-xs text-gray-400">
+                  {onlineUsers.includes(user._id) ? "🟢 Online" : "⚫ Offline"}
+                </p>
               </div>
             </div>
           ))

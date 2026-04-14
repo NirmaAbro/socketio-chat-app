@@ -4,6 +4,8 @@ import ChatSidebar from "@/components/Sidebar";
 import ChatWindow from "@/components/ChatWindow";
 
 export default function Page() {
+
+  
   return (
     <div className="h-screen flex bg-[#111b21]">
     <div className="w-full max-w-6xl mx-auto flex">

@@ -1,20 +1,29 @@
 import { create } from "zustand";
 
-interface ChatState {
+type ChatStore = {
   userId: string;
+  selectedUser: any;
+  setSelectedUser: (user: any) => void;
+
   messages: any[];
-  setUser: (id: string) => void;
+  setMessages: (msgs: any[]) => void;
   addMessage: (msg: any) => void;
-}
 
-export const useChatStore = create<ChatState>((set) => ({
-  userId: "",
+  onlineUsers: string[];
+  setOnlineUsers: (users: string[]) => void;
+};
+
+export const useChatStore = create<ChatStore>((set) => ({
+  userId: "myId123", // replace with real logged-in user
+
+  selectedUser: null,
+  setSelectedUser: (user) => set({ selectedUser: user }),
+
   messages: [],
-
-  setUser: (id) => set({ userId: id }),
-
+  setMessages: (msgs) => set({ messages: msgs }),
   addMessage: (msg) =>
-    set((state) => ({
-      messages: [...state.messages, msg],
-    })),
+    set((state) => ({ messages: [...state.messages, msg] })),
+
+  onlineUsers: [],
+  setOnlineUsers: (users) => set({ onlineUsers: users }),
 }));

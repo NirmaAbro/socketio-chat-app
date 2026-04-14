@@ -4,19 +4,20 @@ import { useState } from "react";
 import { socket } from "@/lib/socket";
 import { useChatStore } from "@/lib/store";
 
+
 export default function MessageInput() {
   const [text, setText] = useState("");
-  const { userId } = useChatStore();
+  const { userId, selectedUser } = useChatStore();
 
   const sendMessage = () => {
-    if (!text) return;
-
+    if (!text || !selectedUser) return;
+  
     socket.emit("send_message", {
       sender: userId,
-      receiver: "user2",
+      receiver: selectedUser._id,
       content: text,
     });
-
+  
     setText("");
   };
 

@@ -3,31 +3,37 @@
 import { useChatStore } from "@/lib/store";
 
 export default function ChatWindow() {
-  const { messages, userId } = useChatStore();
+  const { messages, userId, selectedUser } = useChatStore();
+
+  console.log("selected user:", selectedUser);
+  const filteredMessages = messages.filter((msg) => {
+    return (
+      msg.sender === selectedUser?._id ||
+      msg.receiver === selectedUser?._id
+    );
+  });
 
   return (
     <div className="flex flex-col h-full bg-[#0b141a]">
-      
+
       {/* HEADER */}
       <div className="p-4 border-b border-gray-700 text-white font-semibold">
-        Chat
+       Name:   {selectedUser?.username}
       </div>
 
       {/* MESSAGES */}
       <div className="flex-1 p-4 overflow-y-auto space-y-3">
-        {messages.map((msg, i) => (
+        {filteredMessages.map((msg, i) => (
           <div
             key={i}
-            className={`flex ${
-              msg.sender === userId ? "justify-end" : "justify-start"
-            }`}
+            className={`flex ${msg.sender === userId ? "justify-end" : "justify-start"
+              }`}
           >
             <div
-              className={`px-4 py-2 rounded-lg max-w-xs text-sm ${
-                msg.sender === userId
+              className={`px-4 py-2 rounded-lg max-w-xs text-sm ${msg.sender === userId
                   ? "bg-[#005c4b] text-white"
                   : "bg-[#202c33] text-white"
-              }`}
+                }`}
             >
               {msg.content}
             </div>
